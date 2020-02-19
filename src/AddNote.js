@@ -13,10 +13,20 @@ class AddNote extends Component {
     });
   };
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    const note = {
+      author: this.state.author,
+      note: this.state.note,
+    };
+    this.props.addNote(note);
+  };
+
   render() {
     return (
       <>
-        <Form>
+        <Form onSubmit={this.handleSubmit}>
           <Form.Field
             control={Input}
             label="Author"
