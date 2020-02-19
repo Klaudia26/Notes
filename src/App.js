@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import AddNote from './AddNote';
+import NotesList from './NotesList';
 import 'semantic-ui-css/semantic.min.css';
-import { Container } from 'semantic-ui-react';
+import { Container, Divider } from 'semantic-ui-react';
 import axios from 'axios';
 
 class App extends Component {
   state = {
     notes: [],
   };
+
+  async componentDidMount() {
+    const url = 'http://localhost:3001/notes';
+    const response = await axios.get(url);
+
+    this.setState({
+      notes: response.data,
+    });
+  }
 
   handleAddNote = async (note) => {
     const url = 'http://localhost:3001/notes';
@@ -16,7 +26,6 @@ class App extends Component {
       createdAdd: new Date(),
     };
     const response = await axios.post(url, payload);
-    // console.log(response);
 
     if (response.status === 200 || response.status === 201) {
       this.setState({
@@ -29,6 +38,8 @@ class App extends Component {
       <>
         <Container>
           <AddNote addNote={this.handleAddNote} />
+          <Divider />
+          <NotesList notes={this.state.notes} />
         </Container>
       </>
     );
